@@ -1,17 +1,20 @@
 import 'dotenv/config'
 import { ENV } from './config/env';
 import express, { request, response, urlencoded, json } from 'express';
+import { getRutas } from './router'
 
 const app = express();
 const port = ENV.PORT || 3001
 
 app.use(urlencoded({extended: true}))
 app.use(json());
-/* 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(getRutas());
 
+ 
+/* app.get('/', (req, res) => {
+  res.send('Hello World!')
+}) */
+/*
 let usuario : {[key: string]: any };
 
 

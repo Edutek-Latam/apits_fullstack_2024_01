@@ -3,7 +3,8 @@ import { request, response } from "express";
 import * as _userService from './user.service'
 
 export function findAll(req=request,res=response){
-    return _userService.findAll()
+    console.log('hola`')
+    res.status(200).send(_userService.findAll()) 
 }
 
 export function findOne(req=request,res=response){
@@ -14,7 +15,8 @@ export function findOne(req=request,res=response){
 
 export function create(req=request,res=response){
     const newUser = req.body
-    return _userService.create(newUser);
+    _userService.create(newUser);
+    res.status(200).send(newUser)
 }
 
 export function update(req=request,res=response){

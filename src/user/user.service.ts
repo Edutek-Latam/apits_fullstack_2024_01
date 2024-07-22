@@ -5,6 +5,7 @@ import { user } from "./user.model";
 
 
 export function findAll(){
+    console.log('hoa2')
     return user;
 }
 

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import {getRouter} from './user/user.router'
+import {routerUser} from './user/user.router'
 
 export function getRutas(){
     const router = Router()
     router.get('/',(req,res)=>{res.send('Hola mundo')})
-    router.use('/api',getRouter())
+    router.use('/api',routerUser)
     return router
 }
 //const userRouter = routerUser;

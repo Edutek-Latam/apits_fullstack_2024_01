@@ -1,12 +1,10 @@
 import { Router } from "express";
 import { create, findAll, findOne, update } from './user.controller';
-export function getRouter(){
+import { validateData } from "../middleware/validation.middleware";
+import { userSchema } from "../schemas/user.schema";
 
-    const routerUser = Router()
-    routerUser.get('/user',(req,res)=>{ res.status(200) });
-routerUser.get('/user/:usuario', findOne);
-routerUser.post('/user', create);
+export const routerUser = Router()
+routerUser.get('/user', findAll)
+routerUser.post('/user',validateData(userSchema), create)
+routerUser.get('/user/:usuario', findOne)
 routerUser.put('/user/:usuario', update)
-return routerUser;
-
-}

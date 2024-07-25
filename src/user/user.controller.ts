@@ -2,21 +2,21 @@ import { request, response } from "express";
 
 import * as _userService from './user.service'
 
-export function findAll(req=request,res=response){
-    const users = _userService.findAll()
+export async function findAll(req=request,res=response){
+    const users = await _userService.findAll()
     res.status(200).send(users) 
 }
 
-export function create(req=request,res=response){
+export  async function create(req=request,res=response){
     const newUser = req.body
-    const user = _userService.create(newUser);
+    const user = await _userService.create(newUser);
     res.status(200).send(user);
 }
 
-export function findOne(req=request,res=response){
+export async function findOne(req=request,res=response){
     const usuario = req.params.usuario;
-    const userEncontrado = _userService.findOne(usuario)
-    console.log(userEncontrado)
+    const userEncontrado = await _userService.findOne(usuario)
+    //console.log(userEncontrado)
     res.status(200).send(userEncontrado)
 }
 

@@ -8,3 +8,6 @@ routerUser.get('/user', findAll)
 routerUser.post('/user',validateData(userSchema), create)
 routerUser.get('/user/:usuario', findOne)
 routerUser.put('/user/:usuario', update)
+
+
+//,

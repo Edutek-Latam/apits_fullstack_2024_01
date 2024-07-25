@@ -1,14 +1,17 @@
+import { BeforeInsert } from "typeorm";
+import { AppDataSource } from "../config/db";
 import { CODES, SUCCESS,MESSSAGE } from "../enums";
+import { IUser } from "../interfaces";
 
 import { IResponse } from "../interfaces/resp.interfaces";
+import { User } from "./user.entity";
 import { user } from "./user.model";
 
+const _userRepository = AppDataSource.getRepository(User);
 
-export function findAll(){
-    return  {code:CODES.OK, 
-        success:SUCCESS.OK,
-        data:{...user}, 
-        message:MESSSAGE.CREATE_USER}
+
+export async function findAll(){
+    return await _userRepository.find();
 }
 
 
@@ -17,10 +20,9 @@ export function findAll(){
  * @param usuario 
  * @returns 
  */
-export function findOne(usuario: string){
-    const userResult = user.find(users=> users.user=== usuario);
-    if(userResult) return formatResponse(CODES.OK,SUCCESS.OK, userResult, MESSSAGE.CREATE_USER)
-    if(!userResult) return formatResponse(CODES.OK,SUCCESS.NOT_FOUND, {},MESSSAGE.USER_NOT_FOUND)
+export async function findOne(id: string){
+   const user = await _userRepository.findOneBy({ id })
+   return user;
 }
 
 /**
@@ -28,12 +30,26 @@ export function findOne(usuario: string){
  * @param body 
  * @returns 
  */
-export function create(body: any) : IResponse{
-    user.push(body)
-    return {code:CODES.OK, 
-        success:SUCCESS.OK,
-        data:{...body}, 
-        message:MESSSAGE.CREATE_USER}
+export async  function create(body: IUser) {
+    const newUser = new User();
+    const keys = Object.keys(body);
+    newUser.primerNombre = body.primerNombre
+    newUser.segundoNombre = body.segundoNombre;
+    newUser.apellidos = body.apellidos;
+    newUser.correo = body.correo;
+    newUser.password = body.password;
+    newUser.telefono = body.telefono;
+    newUser.user = body.user;
+
+    const userSave =  await _userRepository.save(newUser)
+    return userSave;
+    console.log(Object.keys(body));
+    
+    /* newUser.primerNombre = body.primerNombre
+    newUser.segundoNombre = body.segundoNombre;
+    newUser.apellidos = body.apellidos;
+    newUser.telefono = body.apellidos */
+
 }
 
 /**

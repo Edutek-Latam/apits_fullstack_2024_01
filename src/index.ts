@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { ENV } from './config/env';
 import express, { request, response, urlencoded, json } from 'express';
 import { getRutas } from './router'
+import { AppDataSource } from './config/db';
 
 const app = express();
 const port = ENV.PORT || 3001
@@ -40,6 +41,15 @@ app.post('/',(req=request,res=response)=>{
 }) */
 
 //console.log(process.env)
+
+AppDataSource.initialize()
+  .then(()=>{
+    console.log('Init DB .........')
+  })
+  .catch(error=>{
+    console.error(error)
+  })
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

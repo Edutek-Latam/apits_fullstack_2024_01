@@ -6,6 +6,7 @@ import { IUser } from "../interfaces";
 import { IResponse } from "../interfaces/resp.interfaces";
 import { User } from "./user.entity";
 import { user } from "./user.model";
+import { passwordHash } from "../utils/hash";
 
 const _userRepository = AppDataSource.getRepository(User);
 
@@ -21,7 +22,12 @@ export async function findAll(){
  * @returns 
  */
 export async function findOne(id: string){
-   const user = await _userRepository.findOneBy({ id })
+   ///const user = await _userRepository.findOneBy({ id })
+   const user = await _userRepository.createQueryBuilder()
+   .addSelect('password')
+   .where( {id} )
+   .execute()
+    console.log(user)
    return user;
 }
 
@@ -31,19 +37,37 @@ export async function findOne(id: string){
  * @returns 
  */
 export async  function create(body: IUser) {
-    const newUser = new User();
-    const keys = Object.keys(body);
-    newUser.primerNombre = body.primerNombre
+    try {
+        const password = await passwordHash(body.password)
+        //body.password = password;
+        const newUser = _userRepository.create({...body, password:password});
+        
+        const registro = await _userRepository.insert(newUser);
+        if(registro){
+            return {code: CODES.OK, success: SUCCESS.OK, message:MESSSAGE.CREATE_USER, data: {}}
+        }
+
+    } catch (error) {
+        if(error instanceof Error){
+            const errorMessage = {   errorCode: (error as any).code, detail: (error as any).detail  }
+            const resp = { code: CODES.BAD_REQUEST, 
+                success: SUCCESS.ERR, 
+                message:'Error en base de datos', 
+                data:errorMessage }
+            return resp
+        }
+    }
+    
+
+   /*  newUser.primerNombre = body.primerNombre
     newUser.segundoNombre = body.segundoNombre;
     newUser.apellidos = body.apellidos;
     newUser.correo = body.correo;
     newUser.password = body.password;
     newUser.telefono = body.telefono;
-    newUser.user = body.user;
+    newUser.user = body.user; */
 
-    const userSave =  await _userRepository.save(newUser)
-    return userSave;
-    console.log(Object.keys(body));
+    
     
     /* newUser.primerNombre = body.primerNombre
     newUser.segundoNombre = body.segundoNombre;
@@ -58,16 +82,13 @@ export async  function create(body: IUser) {
  * @param body 
  * @returns 
  */
-export function update(usuario: string, body: any){
-    //const userResult = findOne(usuario);
-    let userIndex = user.findIndex(users=> users.user=== usuario);
-    if(userIndex > 0){
-        return formatResponse(CODES.ERR,SUCCESS.NOT_FOUND,{},MESSSAGE.USER_NOT_FOUND)
-    }
-    user[userIndex] = {...user[userIndex], ...body}
-    console.log(user)
-    return formatResponse(CODES.OK,SUCCESS.OK,user[userIndex], MESSSAGE.USER_UPDATE)
-    //user = {...userResult,}
+export  async function update(id: string, body: IUser){
+    const user = await _userRepository.preload({
+        id,
+        ...body
+    })
+    await _userRepository.save(user as User)
+    return {code:100, message:'Registro guardo conexito'}
 }
 
 

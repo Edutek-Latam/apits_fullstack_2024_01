@@ -10,7 +10,8 @@ export async function findAll(req=request,res=response){
 export  async function create(req=request,res=response){
     const newUser = req.body
     const user = await _userService.create(newUser);
-    res.status(200).send(user);
+    console.log(user)
+    res.status((user as any).code).send(user);
 }
 
 export async function findOne(req=request,res=response){
@@ -23,10 +24,10 @@ export async function findOne(req=request,res=response){
 
 
 
-export function update(req=request,res=response){
+export async function update(req=request,res=response){
     const newUser = req.body;
     const user = req.params.usuario;
-    const userUpdate = _userService.update(user, newUser);
+    const userUpdate = await  _userService.update(user, newUser);
     res.status(200).send(userUpdate)
     //return _userService.update(user, newUser);
 }

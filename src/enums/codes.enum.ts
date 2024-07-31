@@ -1,4 +1,5 @@
 export enum CODES{
-    'OK'='100',
-    'ERR'='150',
+    'OK'=200,
+    'ERR'=500,
+    'BAD_REQUEST' = 400
 }

@@ -1,9 +1,10 @@
 import { Router } from "express";
 import {routerUser} from './user/user.router'
+import { routerLogin } from "./auth/singin/login.route";
 
 export function getRutas(){
     const router = Router()
-    router.get('/',(req,res)=>{res.send('Hola mundo')})
+    router.use('/api', routerLogin)
     router.use('/api',routerUser)
     return router
 }

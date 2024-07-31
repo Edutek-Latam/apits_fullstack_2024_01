@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({name:'user'})
 export class User{
@@ -24,10 +24,15 @@ export class User{
     @Column({unique: true})
     user: string;
 
-    @Column({nullable: false})
+    @Column({nullable: false, select: false})
     password: string;
 
     @Column({default: true,name:'is_active'})
     isActive: boolean
 
+    @CreateDateColumn({name:'created_at'})
+    createdAt: Date
+
+    @UpdateDateColumn({name:'updated_at'})
+    updatedAt: Date;
 }

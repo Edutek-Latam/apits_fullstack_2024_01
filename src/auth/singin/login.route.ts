@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { loginuser } from "./login.controller";
+import { loginuser, singup } from "./login.controller";
+import { validateData } from "../../middleware/validation.middleware";
+import { loginSchema, userSchema } from "../../schemas/user.schema";
 
 export const routerLogin = Router()
-routerLogin.post('/auth/singin', loginuser)
+routerLogin.post('/auth/singin',validateData(loginSchema),  loginuser)
+routerLogin.post('/auth/register',validateData(userSchema),  singup)

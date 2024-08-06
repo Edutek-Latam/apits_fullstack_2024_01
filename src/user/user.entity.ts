@@ -21,8 +21,9 @@ export class User{
     @Column()
     telefono: number;
 
+    
     @Column({unique: true})
-    user: string;
+    username: string;
 
     @Column({nullable: false, select: false})
     password: string;

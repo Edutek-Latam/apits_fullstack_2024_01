@@ -7,7 +7,14 @@ export const userSchema = z.object(
     apellidos: z.string().min(3),
     correo: z.string().email(),
     telefono: z.number(),
-    user: z.string().min(3),
+    username: z.string().min(3),
+    password: z.string().min(3)
+    }
+)
+
+export const loginSchema = z.object(
+    {
+    username: z.string().min(3),
     password: z.string().min(3)
     }
 )
